@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  pricing.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=81
+    ports:
+      - "5000:81"
+    
+  # testexpo:
+  #   ports:
+  #     - "5003:8081"
+  
+  postgres_db:
+    ports:
+      - "5432:5432" 
+
+  proxy:
+    ports:
+      - "80:80" 

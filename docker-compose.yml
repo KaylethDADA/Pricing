@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  pricing.api:
+    image: ${DOCKER_REGISTRY-}pricingapi
+    build:
+      context: .
+      dockerfile: Pricing.Api/Dockerfile
+    depends_on:
+      - postgres_db
+    environment:
+      - ConnectionStrings__DefaultConnection=User ID=postgres;Password=1488;Host=postgres_db;Port=5432;Database=DbTestLex;
+
+  # testexpo:
+  #   image: latestnetiv
+  #   build:
+  #     context: ./pricing-client-native
+  #     dockerfile: Dockerfile
+
+  postgres_db:
+    container_name: LiV
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1488
+      - POSTGRES_DB=DbTestLex
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  proxy:
+    image: nginx:mainline
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - pricing.api
+      # - testexpo
+
+volumes:
+  postgres_data:
